@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Reloading daemons."
+systemctl --user daemon-reload && echo "Done."
+echo "Stopping SyncThing Service"
+systemctl --user stop syncthing.service && echo "Done."
+echo "Starting SyncThing Service"
+systemctl --user start syncthing.service && echo "Done."

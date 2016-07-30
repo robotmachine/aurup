@@ -1,38 +1,87 @@
 #!/bin/bash
 #
+# aurup
+# Simple updater for the Arch Users Repository (AUR)
+# https://aur.archlinux.org
+# Note: This probably won't work right on your machine unmodified.
+# It is just my personal project.
+#
+source $HOME/.auruprc
+# Error in case that files doesn't exist.
+if [[ -z $aurDir ]]; then
+	echo "Create an ~/.auruprc file with"
+	echo 'aurDir="/path/to/your/aur/directory"'
+	echo "No trailing slash."
+	exit
+fi
+
 ## For loop looks in every directory within the aur directory.
-for AurPkg in ~/doc/aur/* ; do
-	#unset GitPull
-	#unset GitStat
-	pushd "$AurPkg" >/dev/null 2<&1
-	
-	# Work only with git repos
-	if [ ! -d .git ]; then
-		popd
+for aurPkg in $aurDir/* ; do
+	# Exclude files in the aur directory.
+	if [[ ! -d $aurPkg ]]; then
+		continue
+	# Exclude directories that are not git repos.
+	elif [[ ! -d $aurPkg/.git ]]; then
 		continue
 	fi
+	
+	# Enter the directory.
+	pushd "$aurPkg" >/dev/null 2<&1
+	
+	# Extract the last bit of the path to get just the project name.
+	aurName="$(echo "$aurPkg" | awk -F \/ '{ print $NF }')"
 
-	# Remove src directories and clean any previously created files
-	#if [ -d src ] ; then
-	#	rm -rf src
-	#fi
-	#git clean -df >/dev/null 2<&1
+	# Output for whoever is watching.
+	echo -ne "Working on $aurName\033[0K\r"
 
-	# AurName is the name of the directory
-	AurName="$(echo "$AurPkg" | awk -F \/ '{ print $NF }')"
-	# Arbitrary spacing character
-	SpaceChar=".:."
+	# Update from remote
+	git remote update >/dev/null 2<&1
+	# Compare local and remote
+	gitLocal=$(git rev-parse @)
+	gitRemote=$(git rev-parse @{u})
+	# If an update is not needed, continue. 
+	# Otherwise, add the name to the list of repos that need an update.
+	if [ $gitLocal = $gitRemote ] ; then
+		continue
+	else
+		if [[ -z "$gitUpdate" ]]; then
+			aurPath=($aurPkg)
+			gitUpdate=($aurName)
+			gitCount=1
+		else
+			aurPath+=($aurPkg)
+			gitUpdate+=($aurName)
+			gitCount=$[gitCount+1]
+		fi
+	fi
+	popd >/dev/null 2<&1
+done
 
-	GitStat="Null."
-	# Do a git pull and store the output in GitPull
-	#GitPull=$(git pull)
-	# Check if GitPull was up to date or if it pulled something.
-	#if [[ $GitPull == "Already up-to-date." ]]; then
-	#	GitStat=$GitPull
-	#else
-	#	GitStat="Updated."
-	#fi
-	# Print the results
-	printf "%30s %s %s\n" "$AurName" "$SpaceChar" "$GitStat"
+if [[ $gitCount ]]; then
+	echo "==> Upgrading $gitCount Packages"
+	echo "${gitUpdate[@]}"
+else
+	echo "==> All AUR packages up-to-date!"
+	exit
+fi
+
+for aurUpdating in ${aurPath[@]}; do
+	# Enter directory
+	pushd "$aurUpdating" >/dev/null 2<&1
+
+	# Clean any previous build files
+	if [[ -d src ]]; then
+		rm -rf src >/dev/null 2<&1
+	fi
+	git clean -df >/dev/null 2<&1
+	git pull >/dev/null 2<&1
+	
+	echo "Authorise Sudo:"
+	sudo echo "Thanks."
+	makepkg -si --noconfirm	
+	
+	if [[ -e .aurconfig ]] ; then
+		sh .aurconfig
+	fi
 	popd >/dev/null 2<&1
 done
