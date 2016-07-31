@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Reloading daemons."
+sudo systemctl daemon-reload && echo "Done."
+echo "Stopping Pacserve Service"
+sudo systemctl stop pacserve.service && echo "Done."
+echo "Starting Pacserve Service"
+sudo systemctl start pacserve.service && echo "Done."

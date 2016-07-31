@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Reloading daemons."
+sudo systemctl daemon-reload && echo "Done."
+echo "Stopping Sick Beard Service"
+sudo systemctl stop sickbeard.service && echo "Done."
+echo "Starting Sick Beard Service"
+sudo systemctl start sickbeard.service && echo "Done."
