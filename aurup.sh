@@ -60,6 +60,11 @@ done
 if [[ $gitCount ]]; then
 	echo "==> Upgrading $gitCount Packages"
 	echo "${gitUpdate[@]}"
+elif [[ -e /var/lib/pacman/db.lck ]]; then
+	echo "==> $gitCount Packages Require Updates"
+	echo "ERROR: Pacman is currently running!"
+	echo "Re-run Aurup once Pacman has completed."
+	exit
 else
 	echo "==> All AUR packages up-to-date!"
 	exit
