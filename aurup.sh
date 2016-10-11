@@ -57,14 +57,20 @@ for aurPkg in $aurDir/* ; do
 	popd >/dev/null 2<&1
 done
 
-if [[ -e /var/lib/pacman/db.lck ]]; then
-	echo "==> $gitCount Packages Require Updates"
-	echo "ERROR: Pacman is currently running!"
-	echo "Re-run Aurup once Pacman has completed."
-	exit
-elif [[ $gitCount ]]; then
-	echo "==> Upgrading $gitCount Packages"
-	echo "${gitUpdate[@]}"
+# Check if there are any packages that need to be updated.
+if [[ $gitCount ]]; then
+	# If Pacman is already running, display number of updates required and exit
+	if [[ -e /var/lib/pacman/db.lck ]]; then
+		echo "==> $gitCount Packages Require Updates"
+		echo "ERROR: Pacman is currently running!"
+		echo "Re-run Aurup once Pacman has completed."
+		exit
+	else
+	# If Pacman isn't running, display packages to update and proceed to the update process
+		echo "==> Upgrading $gitCount Packages"
+		echo "${gitUpdate[@]}"
+	fi
+# If no packages need updating, display message and exit.
 else
 	echo "==> All AUR packages up-to-date!"
 	exit
