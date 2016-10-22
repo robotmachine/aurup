@@ -70,7 +70,7 @@ if [[ $gitCount ]]; then
 		exit
 	else
 	# If Pacman isn't running, display packages to update and proceed to the update process
-		echo "==> Upgrading $gitCount Packages"
+		echo "==> Upgrading $gitCount Package(s)"
 		echo "${gitUpdate[@]}"
 	fi
 # If no packages need updating, display message and exit.
