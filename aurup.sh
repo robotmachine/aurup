@@ -62,6 +62,7 @@ if [[ $gitCount ]]; then
 	# If Pacman is already running, display number of updates required and exit
 	if [[ -e /var/lib/pacman/db.lck ]]; then
 		echo "==> $gitCount Packages Require Updates"
+		echo "${gitUpdate[@]}"
 		echo "ERROR: Pacman is currently running!"
 		echo "Re-run Aurup once Pacman has completed."
 		exit
