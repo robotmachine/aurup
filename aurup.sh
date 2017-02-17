@@ -7,6 +7,10 @@
 # It is just my personal project.
 #
 source $HOME/.auruprc
+
+echo "Authorise Sudo:"
+sudo echo "Thanks."
+
 # Error in case that files doesn't exist.
 if [[ -z $aurDir ]]; then
 	echo "Create an ~/.auruprc file with"
