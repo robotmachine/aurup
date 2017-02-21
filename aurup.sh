@@ -8,8 +8,10 @@
 #
 source $HOME/.auruprc
 
+echo ""
 echo "Authorise Sudo:"
 sudo echo "Thanks."
+echo ""
 
 # Error in case that files doesn't exist.
 if [[ -z $aurDir ]]; then
@@ -20,6 +22,7 @@ if [[ -z $aurDir ]]; then
 fi
 
 ## For loop looks in every directory within the aur directory.
+echo "Updating repositories:"
 for aurPkg in $aurDir/* ; do
 	# Exclude files in the aur directory.
 	if [[ ! -d $aurPkg ]]; then
@@ -36,7 +39,7 @@ for aurPkg in $aurDir/* ; do
 	aurName="$(echo "$aurPkg" | awk -F \/ '{ print $NF }')"
 
 	# Output for whoever is watching.
-	echo -ne "Working on $aurName\033[0K\r"
+	echo -ne "==> $aurName\033[0K\r"
 
 	# Update from remote
 	git remote update >/dev/null 2<&1
