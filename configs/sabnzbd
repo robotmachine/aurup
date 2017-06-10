@@ -1,13 +1,13 @@
 #!/bin/bash
 
 sabDir="/opt/sabnzbd"
-srcSrv="/home/brian/doc/src/miscbash/sabnzbd.service"
+srcSrv="/home/brian/doc/src/bash-misc/sabnzbd.service"
 sabSrv="/usr/lib/systemd/system/sabnzbd.service"
-
-# Fix permissions on SabNZBd+ directory
+#
+## Fix permissions on SabNZBd+ directory
 echo "Fixing ownership." ; sudo chown -R brian "$sabDir" && echo "Done."
 echo "Fixing group." ; sudo chgrp -R users "$sabDir" && echo "Done."
-
+#
 # Restore service file
 echo "Copy file."
 sudo cp "$srcSrv" "$sabSrv" && echo "Done."
