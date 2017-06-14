@@ -1,8 +1,0 @@
-#!/bin/bash
-
-echo "Reloading daemons."
-sudo systemctl daemon-reload && echo "Done."
-echo "Stopping CouchPotato Service"
-sudo systemctl stop couchpotato.service && echo "Done."
-echo "Starting CouchPotato Service"
-sudo systemctl start couchpotato.service && echo "Done."
