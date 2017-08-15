@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#
+## Reload and restart Plex
 echo "Reloading daemons."
 sudo systemctl daemon-reload && echo "Done."
 echo "Stopping Plex Service"
