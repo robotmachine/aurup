@@ -1,0 +1,26 @@
+#!/bin/bash
+
+radarrDir="/var/lib/radarr"
+srcSrv="/home/brian/doc/src/bash-misc/radarr.service"
+radarrSrv="/usr/lib/systemd/system/radarr.service"
+#
+## Fix permissions on SabNZBd+ directory
+echo "Fixing ownership." ; sudo chown -R brian "$radarrDir" && echo "Done."
+echo "Fixing group." ; sudo chgrp -R users "$radarrDir" && echo "Done."
+#
+# Restore service file
+echo "Copy file."
+sudo cp "$srcSrv" "$radarrSrv" && echo "Done."
+echo "Restore ownership."
+sudo chown root "$radarrSrv" && echo "Done."
+echo "Restore group."
+sudo chgrp root "$radarrSrv" && echo "Done."
+echo "Restore permissions."
+sudo chmod 644 "$radarrSrv" && echo "Done."
+
+echo "Reloading daemons."
+sudo systemctl daemon-reload && echo "Done."
+echo "Stopping radarr Service"
+sudo systemctl stop radarr.service && echo "Done."
+echo "Starting radarr Service"
+sudo systemctl start radarr.service && echo "Done."
