@@ -1,6 +1,6 @@
 #!/bin/bash
 
-radarrDir="/var/lib/radarr"
+radarrDir="/usr/lib/radarr"
 srcSrv="/home/brian/doc/src/bash-misc/radarr.service"
 radarrSrv="/usr/lib/systemd/system/radarr.service"
 #
