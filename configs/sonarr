@@ -1,12 +1,13 @@
 #!/bin/bash
 
-sonarrDir="/var/lib/sonarr"
+sonarrDir="/usr/lib/sonarr"
+sonarrDataDir="/var/lib/sonarr"
 srcSrv="/home/brian/doc/src/bash-misc/sonarr.service"
 sonarrSrv="/usr/lib/systemd/system/sonarr.service"
 #
 ## Fix permissions on SabNZBd+ directory
-echo "Fixing ownership." ; sudo chown -R brian "$sonarrDir" && echo "Done."
-echo "Fixing group." ; sudo chgrp -R users "$sonarrDir" && echo "Done."
+echo "Fixing ownership." ; sudo chown -R brian "$sonarrDir" "$sonarrDataDir" && echo "Done."
+echo "Fixing group." ; sudo chgrp -R users "$sonarrDir" "$sonarrDataDir" && echo "Done."
 #
 # Restore service file
 echo "Copy file."
