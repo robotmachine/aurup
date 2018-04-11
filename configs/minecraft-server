@@ -1,8 +1,0 @@
-#!/bin/bash
-
-echo "Reloading daemons."
-sudo systemctl daemon-reload && echo "Done."
-echo "Stopping Minecraft Server Service"
-sudo systemctl stop minecraftd.service && echo "Done."
-echo "Starting Minecraft Server Service"
-sudo systemctl start minecraftd.service && echo "Done."
