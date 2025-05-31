@@ -8,11 +8,6 @@
 #
 source $HOME/.auruprc
 
-echo ""
-echo "Authorise Sudo:"
-sudo echo "Thanks."
-echo ""
-
 # Error in case that files doesn't exist.
 if [[ -z $aurDir ]]; then
     echo "Create an ~/.auruprc file with"
@@ -90,17 +85,17 @@ for aurUpdating in ${aurPath[@]}; do
     ## Enter directory
     pushd "$aurUpdating" >/dev/null 2<&1
     ## Clean any previous build files
-    oldStuff=(pkg src *.tar.xz *.rpm)
-    git clean -df >/dev/null 2<&1
+    git clean -dfx >/dev/null 2<&1
     ## Pull!
     git pull >/dev/null 2<&1
     ## Install!
     echo "Authorise Sudo:"
     sudo echo "Thanks."
-    makepkg -si --noconfirm    
+    makepkg -si --noconfirm --needed
     ## Run post-install script if present
-    if [[ -e .aurconfig ]] ; then
-        sh .aurconfig
+    if [[ -z "$aurScriptDir" ]]; then
+      continue
     fi
+    find "$aurScriptDir" -iname "$(basename $(pwd))" -exec sh "{}" \;
     popd >/dev/null 2<&1
 done
