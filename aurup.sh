@@ -89,8 +89,6 @@ for aurUpdating in ${aurPath[@]}; do
     ## Pull!
     git pull >/dev/null 2<&1
     ## Install!
-    echo "Authorise Sudo:"
-    sudo echo "Thanks."
     makepkg -si --noconfirm --needed
     ## Run post-install script if present
     if [[ -z "$aurScriptDir" ]]; then
